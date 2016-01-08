@@ -215,7 +215,8 @@ class Foot(Base.StartClass, Layout.LayoutClass):
                 self.ballRFList.append(self.RFEJxt)
                 # set as template using overrides in order to permit no template children:
                 for rfJoint in rfJointList:
-                    cmds.setAttr(rfJoint+'.visibility', 0)
+                    cmds.setAttr(rfJoint+'.visibility', 1)
+                    cmds.setAttr(rfJoint+'.drawStyle', 2) #Show no draw style for the bone so it will be "hidden"
                 '''
                 for rfJoint in rfJointList:
                     cmds.setAttr(rfJoint+'.overrideEnabled', 1)

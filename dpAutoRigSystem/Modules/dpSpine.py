@@ -380,6 +380,17 @@ class Spine(Base.StartClass, Layout.LayoutClass):
                     # apply volumeVariation to joints in the middle ribbon setup:
                     cmds.connectAttr(rbnBlendColors + '.outputR', self.aRbnJointList[n] + '.scaleX')
                     cmds.connectAttr(rbnBlendColors + '.outputR', self.aRbnJointList[n] + '.scaleZ')
+
+                # create a multiplyDivide to use the Stretch/Squash value on the first bone of the spine
+                # lesser than the middle
+                rbnFirstJntMD = cmds.createNode('multiplyDivide', name=side + self.userGuideName + "_Rbn_FirstJnt_MD")
+                cmds.connectAttr(rbnBlendColors + '.outputR', rbnFirstJntMD + '.input2X')
+                cmds.setAttr(rbnFirstJntMD + '.input1X', 0.8)
+                cmds.setAttr(rbnFirstJntMD + '.operation', 1)
+                # apply volumeVariation to the first joint of the ribbon:
+                cmds.connectAttr(rbnFirstJntMD + '.outputX', self.aRbnJointList[0] + '.scaleX')
+                cmds.connectAttr(rbnFirstJntMD + '.outputX', self.aRbnJointList[0] + '.scaleZ')
+
                 # organize groups:
                 self.rbnRigGrp = cmds.group(name=side + self.userGuideName + "_Grp", empty=True)
                 self.rbnControlGrp = cmds.group(name=side + self.userGuideName + "_Control_Grp", empty=True)

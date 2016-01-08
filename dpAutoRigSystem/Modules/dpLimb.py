@@ -401,6 +401,8 @@ class Limb(Base.StartClass, Layout.LayoutClass):
             # store the number of this guide by module type
             dpAR_count = utils.findModuleLastNumber(CLASS_NAME, "dpAR_type") + 1
             # run for all sides
+            #Declare a list of ctrl we want to lock rotation
+            self.aKneeElbow = []
             for s, side in enumerate(sideList):
                 # getting type of limb:
                 enumType = cmds.getAttr(self.moduleGrp + '.type')
@@ -499,7 +501,6 @@ class Limb(Base.StartClass, Layout.LayoutClass):
                         pass
 
                     # Other arm ctrl can keep the default xyz
-
                     self.fkCtrlList.append(fkCtrl)
                     cmds.setAttr(fkCtrl + '.visibility', keyable=False)
                     # creating the originedFrom attributes (in order to permit integrated parents in the future):
@@ -525,6 +526,11 @@ class Limb(Base.StartClass, Layout.LayoutClass):
                             cmds.setAttr(self.toParentExtremCtrl + ".translateX", -self.ctrlRadius)
                         utils.zeroOut([self.toParentExtremCtrl])
                         ctrls.setLockHide([self.toParentExtremCtrl], ['v'])
+
+                    #Keep the knee and elbow to lock the Y and
+                    if jName == cornerName or jName == cornerBName:
+                        self.aKneeElbow.append(fkCtrl)
+
                 # zeroOut controls:
                 self.zeroFkCtrlList = utils.zeroOut(self.fkCtrlList)
                 self.zeroFkCtrlGrp = cmds.group(self.zeroFkCtrlList[0], self.zeroFkCtrlList[1],
@@ -868,7 +874,7 @@ class Limb(Base.StartClass, Layout.LayoutClass):
 
                 # working with autoOrient of poleVector:
                 cmds.addAttr(self.ikCornerCtrl, longName=self.langDic[self.langName]['c_autoOrient'],
-                             attributeType='float', minValue=0, maxValue=1, defaultValue=1, keyable=True)
+                             attributeType='float', minValue=0, maxValue=1, defaultValue=0, keyable=True)
                 if self.limbType == self.langDic[self.langName]['m028_arm']:
                     cmds.setAttr(self.ikCornerCtrl + '.' + self.langDic[self.langName]['c_autoOrient'], 0)
                 if self.limbStyle == self.langDic[self.langName]['m042_default']:
@@ -1322,6 +1328,14 @@ class Limb(Base.StartClass, Layout.LayoutClass):
                 # delete duplicated group for side (mirror):
                 cmds.delete(side + self.userGuideName + '_' + self.mirrorGrp)
             # finalize this rig:
+
+            #Lock the knee and elbow rotation we don't want the animators to touch
+            if self.aKneeElbow:
+                if limbTypeName == LEG:
+                    ctrls.setLockHide(self.aKneeElbow, ['rx', 'rz']) #Lock Y and Z rotation for the elbow and knee
+                elif limbTypeName == ARM:
+                    ctrls.setLockHide(self.aKneeElbow, ['ry', 'rz']) #Lock Y and Z rotation for the elbow and knee
+
             self.integratingInfo()
             cmds.select(clear=True)
         # delete UI (moduleLayout), GUIDE and moduleInstance namespace:

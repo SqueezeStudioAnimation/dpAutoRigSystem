@@ -1319,7 +1319,8 @@ class DP_AutoRig_UI:
                                     cmds.parent(ikHandleGrp, toLimbIkHandleGrp, absolute=True)
                                     #Delete the old constraint (two line before) and recreate them on the extrem joint on the limb
                                     cmds.parentConstraint(extremJnt, footJnt, maintainOffset=True, name=footJnt+"_ParentConstraint")[0]
-                                    cmds.scaleConstraint(extremJnt, footJnt, maintainOffset=True, name=footJnt+"_ScaleConstraint")[0]
+                                    #Remove the scale constraint to prevent scaling problem when the foot stretch
+                                    #cmds.scaleConstraint(extremJnt, footJnt, maintainOffset=True, name=footJnt+"_ScaleConstraint")[0]
                                     if limbType == LEG:
                                         cmds.parent(ikStretchExtremLoc, ballRFList, absolute=True)
                                         if cmds.objExists(extremJnt+".dpAR_joint"):
