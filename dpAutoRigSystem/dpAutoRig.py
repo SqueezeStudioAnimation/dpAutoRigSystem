@@ -1650,26 +1650,36 @@ class DP_AutoRig_UI:
 
                 if not pymel.hasAttr(pOptCtrl, "display"):
                     pymel.addAttr(pOptCtrl, ln="display", at="enum", enumName="----------", keyable=True)
+                    #Bypass nonkeyable problem in pymel
+                    cmds.setAttr(pOptCtrl.display.name(), keyable=False, channelBox=True)
 
                 if not pymel.hasAttr(pOptCtrl, "displayMesh"):
                     pymel.addAttr(pOptCtrl, ln="displayMesh", min=0, max=1, defaultValue=1, keyable=True)
                     pymel.connectAttr(pOptCtrl.displayMesh, pRenderGrp.visibility, force=True)
+                    #Bypass nonkeyable problem in pymel
+                    cmds.setAttr(pOptCtrl.displayMesh.name(), keyable=False, channelBox=True)
 
                 if not pymel.hasAttr(pOptCtrl, "displayProxy"):
                     pymel.addAttr(pOptCtrl, ln="displayProxy", min=0, max=1, defaultValue=0, keyable=True)
                     pymel.connectAttr(pOptCtrl.displayProxy, pProxyGrp.visibility, force=True)
+                    #Bypass nonkeyable problem in pymel
+                    cmds.setAttr(pOptCtrl.displayProxy.name(), keyable=False, channelBox=True)
 
                 if not pymel.hasAttr(pOptCtrl, "displayCtrl"):
                     pymel.addAttr(pOptCtrl, ln="displayCtrl", min=0, max=1, defaultValue=1, keyable=True)
                     pymel.connectAttr(pOptCtrl.displayCtrl, pCtrlVisGrp.visibility, force=True)
 
-                if not pymel.hasAttr(pOptCtrl, "General"):
-                    pymel.addAttr(pOptCtrl, ln="General", at="enum", enumName="----------", keyable=True)
+                if not pymel.hasAttr(pOptCtrl, "general"):
+                    pymel.addAttr(pOptCtrl, ln="general", at="enum", enumName="----------", keyable=True)
+                    #Bypass nonkeyable problem in pymel
+                    cmds.setAttr(pOptCtrl.general.name(), keyable=False, channelBox=True)
 
                 #Only create if a IkFk attribute is found
                 if not pymel.hasAttr(pOptCtrl, "IKFKBlend"):
                     if (pOptCtrl.listAttr(string="*IkFk*")):
                         pymel.addAttr(pOptCtrl, ln="IKFKBlend", at="enum", enumName="----------", keyable=True)
+                        #Bypass nonkeyable problem in pymel
+                        cmds.setAttr(pOptCtrl.IKFKBlend.name(), keyable=False, channelBox=True)
 
 
         # re-declaring guideMirror and previewMirror groups:

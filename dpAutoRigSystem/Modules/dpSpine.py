@@ -310,7 +310,7 @@ class Spine(Base.StartClass, Layout.LayoutClass):
                 cmds.parent(downCluster, upCluster, clustersGrp, relative=True)
                 # make ribbon joints groups scalable:
                 for r, rbnJntGrp in enumerate(rbnJointGrpList):
-                    if ((r > 0) and (r < (len(rbnJointGrpList) - 1))):
+                    if ((r >= 0) and (r < (len(rbnJointGrpList) - 1))):
                         scaleGrp = cmds.group(rbnJntGrp, name=rbnJntGrp.replace("_Grp", "_Scale_Grp"))
                         ctrls.directConnect(scaleGrp, rbnJntGrp, ['sx', 'sz'])
                         cmds.scaleConstraint(clustersGrp, scaleGrp, maintainOffset=True, name=rbnJntGrp + "_Scale")
